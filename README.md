@@ -1,4 +1,6 @@
 # Powershell Examples
+## What is powershell ?
+PowerShell is an automation platform and scripting language developed by Microsoft for simplifying and automating the management of Windows and Windows Server systems.While PowerShell is primarily a text-based shell, it utilizes Microsoft's .NET Framework of built-in functionality and objects for managing Windows environments
 ## Execute powershell script on current directory
 ```
 Open powershell and execute as below
