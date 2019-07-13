@@ -1,0 +1,47 @@
+### parametrs side.
+param (
+        [string]$sql_server=$args[0],
+        [string]$db_name=$args[1],
+        [string]$sql_query=$args[2],
+        $warn=$args[3],
+        $cri=$args[4]
+      )
+
+
+### Connection Side
+$sqlConn = New-Object System.Data.SqlClient.SqlConnection
+$sqlConn.ConnectionString = “Server=$sql_server;Integrated Security=true;Initial Catalog=$db_name”
+$sqlConn.Open()
+$sqlcmd = $sqlConn.CreateCommand()
+$sqlcmd = New-Object System.Data.SqlClient.SqlCommand
+$sqlcmd.Connection = $sqlConn
+
+$query = $sql_query
+$sqlcmd.CommandText = $query
+$adp = New-Object System.Data.SqlClient.SqlDataAdapter $sqlcmd
+$data = New-Object System.Data.DataSet
+$adp.Fill($data) | Out-Null
+
+
+$result = $Data.Tables[0].Rows.Column1
+if(($result –lt $warn) -or ($result –eq $warn))
+{
+    "Status is OK"
+    $returncode=0
+}
+elseif(($result -lt $cri) -and ($result -gt $warn) )
+{
+    "Status is Warning"
+    $returncode=1
+}
+elseif(($result -gt $cri) -or ($result -eq $cri))
+{
+    "Status is Critical"
+    $returncode=2
+}
+else
+{
+    "Status is Unknown"
+    $returncode=3
+}
+exit($returncode)
